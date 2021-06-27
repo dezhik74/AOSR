@@ -28,39 +28,42 @@ class ObjectActs (models.Model):
     def __str__(self):
         return f'{self.work} -> {self.address}'
 
-    class AOSR(models.Model):
-        act_number = models.CharField(max_length=20, verbose_name='Ном. Акта', blank=True)
-        act_date = models.CharField(max_length=50, verbose_name='Дата Акта')
-        presented_work = models.CharField(max_length=500, verbose_name='Предъявл.')
-        materials = models.CharField(max_length=500, verbose_name='Материалы')
-        permitted_work = models.CharField(max_length=500, verbose_name='Разрешено')
-        begin_date = models.CharField(max_length=50, verbose_name='От:')
-        end_date = models.CharField(max_length=50, verbose_name='До:')
-        work_SNIP = models.CharField(max_length=500, verbose_name='СНИП:', blank=True)
-        docs = models.CharField(max_length=500, verbose_name='Предьявлены документы',
-                                default='исполнительная схема, сертификаты/свителельства', blank=True)
-        annex = models.CharField(max_length=500, verbose_name='Приложения', blank=True)
 
-        object_acts = models.ForeignKey('ObjectActs', on_delete=models.CASCADE, verbose_name='Набор актов объекта',
-                                        related_name='aosr_set')
+class AOSR(models.Model):
+    act_number_prefix = models.CharField(max_length=20, verbose_name='Префикс номера акта', blank=True)
+    act_number = models.CharField(max_length=20, verbose_name='Номер акта', blank=True)
+    act_date = models.CharField(max_length=50, verbose_name='Дата Акта')
+    presented_work = models.CharField(max_length=500, verbose_name='Предъявл.')
+    materials = models.CharField(max_length=500, verbose_name='Материалы')
+    permitted_work = models.CharField(max_length=500, verbose_name='Разрешено')
+    begin_date = models.CharField(max_length=50, verbose_name='От:')
+    end_date = models.CharField(max_length=50, verbose_name='До:')
+    work_SNIP = models.CharField(max_length=500, verbose_name='СНИП:', blank=True)
+    docs = models.CharField(max_length=500, verbose_name='Предьявлены документы',
+                            default='исполнительная схема, сертификаты/свидетельства', blank=True)
+    annex = models.CharField(max_length=500, verbose_name='Приложения', blank=True)
 
-        class Meta:
-            verbose_name = 'Акт скрытых'
-            verbose_name_plural = 'Акты скрытых'
+    object_acts = models.ForeignKey('ObjectActs', on_delete=models.CASCADE, verbose_name='Набор актов объекта',
+                                    related_name='aosr_set')
 
-        def __str__(self):
-            return f'{self.act_number} -> {self.presented_work}'
+    class Meta:
+        verbose_name = 'Акт скрытых'
+        verbose_name_plural = 'Акты скрытых'
 
-    class AOSRFile(models.Model):
-        file_name = models.FileField(upload_to='/media/%Y/%m/%d/', verbose_name='Файл к акту')
-        description = models.CharField(max_length=255, verbose_name='Описание')
-        corner_text = models.CharField(max_length=255,verbose_name='Текст в углу', blank=True)
-        aosr = models.ForeignKey('AOSR', on_delete=models.CASCADE, verbose_name='файлы',
-                                 related_name='files')
+    def __str__(self):
+        return f'{self.act_number_prefix}-{self.act_number} -> {self.presented_work}'
 
-        class Meta:
-            verbose_name = 'Файл к АОСР'
-            verbose_name_plural = 'Файлы для АОСР'
 
-        def __str__(self):
-            return f'Файл {self.description}'
+class AOSRFile(models.Model):
+    file_name = models.FileField(upload_to='media/%Y/%m/%d/', verbose_name='Файл к акту')
+    description = models.CharField(max_length=255, verbose_name='Описание')
+    corner_text = models.CharField(max_length=255,verbose_name='Текст в углу', blank=True)
+    aosr = models.ForeignKey('AOSR', on_delete=models.CASCADE, verbose_name='файлы',
+                             related_name='files')
+
+    class Meta:
+        verbose_name = 'Файл к АОСР'
+        verbose_name_plural = 'Файлы для АОСР'
+
+    def __str__(self):
+        return f'Файл {self.description}'
