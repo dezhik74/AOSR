@@ -1,5 +1,5 @@
 <template>
-    <div class="object-acts-list">
+    <div class="a-object-acts-list">
         <table>
             <tr>
                 <th>Дата</th>
@@ -17,7 +17,7 @@
 
 <script>
     export default {
-        name: "objectactslist",
+        name: "a-object-acts-list",
         components: {},
         props: {},
         data() {
@@ -48,9 +48,13 @@
 </script>
 
 <style scoped>
-    .object-acts-list {
+    .a-object-acts-list {
         width: 100%;
         max-width: 100%;
+    }
+
+    table {
+        width: 100%;
     }
 
 </style>
