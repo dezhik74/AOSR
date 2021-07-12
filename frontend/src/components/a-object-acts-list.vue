@@ -6,19 +6,24 @@
                 <th>Адрес</th>
                 <th>Вид работ</th>
             </tr>
-            <tr v-for="item in objectsdata" :key="item.id">
-                <td class="th1">{{item.create_date}}</td>
-                <td>{{item.address}}</td>
-                <td>{{item.work}}</td>
-            </tr>
+            <a-object-acts-item
+                v-for="object in objectsdata"
+                :key="object.id"
+                v-bind:object_data="object"
+            />
+
         </table>
     </div>
 </template>
 
 <script>
+
+    import aObjectActsItem from './a-object-act-item'
     export default {
         name: "a-object-acts-list",
-        components: {},
+        components: {
+            aObjectActsItem
+        },
         props: {},
         data() {
             return {
